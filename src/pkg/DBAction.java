@@ -1,6 +1,11 @@
 package pkg;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class DBAction {
     static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/DBTEST";
@@ -56,7 +61,7 @@ public class DBAction {
     }
     public void GetUser(Integer ChatID) throws SQLException {
 
-        String INSERT_USERS_SQL = "SELECT name, \"ChatID\", \"Date\"" + "FROM public.users WHERE \"ChatID\"="+ChatID.toString();
+        String INSERT_USERS_SQL = "SELECT name, \"ChatID\", \"Date\"" + " FROM public.users WHERE \"ChatID\" = "+ChatID.toString();
 
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
 
@@ -84,10 +89,10 @@ public class DBAction {
 
 
     }
-    public void insertRecord(String name, int ChatId, String date) throws SQLException {
+    public void insertRecord(String name, int ChatId) throws SQLException {
         String INSERT_USERS_SQL = "INSERT INTO public.users " +
-                "(name, \"ChatID\", \"Date\") " +
-                "VALUES (?, ?, ?);";
+                "(name, \"ChatID\", \"Date\", \"password\") " +
+                "VALUES (?, ?, ?, ?);";
 
         // Step 1: Establishing a Connection
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -96,7 +101,10 @@ public class DBAction {
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
             preparedStatement.setString(1, name);
             preparedStatement.setInt(2, ChatId);
-            preparedStatement.setString(3, date);
+            preparedStatement.setString(3, getCurrentLocalDateTimeStamp());
+            preparedStatement.setString(4, generateSimplePassword());
+            System.out.println(System.currentTimeMillis() / 1000L);
+
 
             System.out.println(preparedStatement);
             // Step 3: Execute the query or update query
@@ -109,7 +117,27 @@ public class DBAction {
 
         // Step 4: try-with-resource statement will auto close the connection.
     }
+    public String getCurrentLocalDateTimeStamp() {
+        return LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+    }
+    private String generatePassword(){
 
+        String password = new Random().ints(10, 33, 122).collect(StringBuilder::new,
+                        StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        return password;
+    }
+    private String generateSimplePassword(){
+        int len = 4;
+        String chars = "0123456789";
+        Random rnd = new Random();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++)
+            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+        return sb.toString();
+    }
     public void updateRecord(String name, int ChatId, String date) throws SQLException {
 
         String INSERT_USERS_SQL = "UPDATE public.users " +
