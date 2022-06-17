@@ -16,6 +16,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="org/secondquadrant/javabook/mybatis/LargeCitiesMapper.xml" />
+        <mapper resource="pkg/LargeCitiesMapper.xml" />
     </mappers>
 </configuration>

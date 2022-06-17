@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.secondquadrant.javabook.mybatis.Mapper">
-    <select id="selectCities" resultType="org.secondquadrant.javabook.mybatis.LargeCities">
-        SELECT * FROM largecities
+    <select id="selectCities" resultType="pkg.LargeCities">
+        SELECT * FROM public.largecities
     </select>
+    <select id="selectUsers" resultType="pkg.Users">
+        SELECT name, "ChatID", "Date", password, "timestamp" FROM public.users
+    </select>
+    <select id="selectUserByID" resultType="pkg.Users">
+        SELECT * FROM public.users WHERE "ChatID" = #{ChatID}
+    </select>
+    <insert id="insertUser" parameterType="pkg.Users">
+        INSERT INTO public.users (name, "ChatID", "Date", "password", "timestamp") VALUES ('Tom',111222,'136-46-54','125',546548)
+    </insert>
 </mapper>
