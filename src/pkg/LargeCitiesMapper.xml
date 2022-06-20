@@ -11,6 +11,9 @@
         SELECT * FROM public.users WHERE "ChatID" = #{ChatID}
     </select>
     <insert id="insertUser" parameterType="pkg.Users">
-        INSERT INTO public.users (name, "ChatID", "Date", "password", "timestamp") VALUES ('Tom',111222,'136-46-54','125',546548)
+        INSERT INTO public.users (name, "ChatID", "Date", "password", "timestamp") VALUES (#{name},#{ChatID},#{Date},#{password},#{timestamp})
     </insert>
+    <update id = "updateUser" parameterType = "pkg.Users">
+        UPDATE public.users SET name = #{name}, "Date" = #{Date}, "password" = #{password}, "timestamp" = #{timestamp}, "Authorized" = #{Authorized} WHERE "ChatID" = #{ChatID}
+    </update>
 </mapper>

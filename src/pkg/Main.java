@@ -16,7 +16,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        DBAction action =new DBAction();
 /*
         try {
             action.GetUser(844555);
@@ -40,9 +39,7 @@ public class Main {
         }
 
  */
-        String resource = "pkg/mybatis-config.xml";
-        InputStream inputStream = Resources.getResourceAsStream(resource);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
 
 /*
         try(SqlSession session = sqlSessionFactory.openSession();)  {
@@ -55,12 +52,12 @@ public class Main {
         catch (Exception e) {
             e.printStackTrace();
         }
-*/
+
 
         try(SqlSession session = sqlSessionFactory.openSession();)  {
 
-            List<Users> list = session.selectList("selectUserByID",111222L);
-
+            List<Users> list = session.selectList("selectUsers");
+            System.out.println("ALL:");
             for (Users a : list) {
                 System.out.println(a);
             }
@@ -69,6 +66,12 @@ public class Main {
         catch (Exception e) {
             e.printStackTrace();
         }
+        */
+
+        Users fUser =Users.getUserSQL(111222L);
+        System.out.println(fUser);
+       // fUser.setAuthorized(true);
+
 
     }
 }
