@@ -1,13 +1,13 @@
-package com.mybot;
+package com.demurelebowski;
 
-import com.mybot.sql.SqlUsers;
-import com.mybot.telegram.User;
+import com.demurelebowski.dto.User;
+import com.demurelebowski.dao.SqlUsers;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Main {
 
+    private static final SqlUsers sqlUsers = new SqlUsers();
 
     public static void main(String[] args) throws IOException {
         /*
@@ -32,13 +32,13 @@ public class Main {
 
 */
 
-        SqlUsers.insertUserSql(new User("User100" , 999999999999L));
+        sqlUsers.insertUserSql(new User("User100" , 999999999999L));
 
-        User foundUser = SqlUsers.getUserSQL(1);
+        User foundUser = sqlUsers.getUserSQL(1);
 
         if (foundUser != null){
             foundUser.setAuthorized(true);
-            SqlUsers.updateUserSql(foundUser);
+            sqlUsers.updateUserSql(foundUser);
         }
         else {
             System.out.println("User not found.");
