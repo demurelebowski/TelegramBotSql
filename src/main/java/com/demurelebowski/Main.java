@@ -28,7 +28,11 @@ public class Main {
         } else {
             System.out.println("User not found.");
         }
+
 */
+
+        SqlUsers.insertUserSql(new User("User100" , 999999999999L));
+
         User foundUser = SqlUsers.getUserSQL(1);
 
         if (foundUser != null){
