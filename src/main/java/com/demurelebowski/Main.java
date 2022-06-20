@@ -1,10 +1,9 @@
-package com.mybot;
+package com.demurelebowski;
 
-import com.mybot.sql.SqlUsers;
-import com.mybot.telegram.User;
+import com.demurelebowski.dto.User;
+import com.demurelebowski.dao.SqlUsers;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Main {
 
