@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.secondquadrant.javabook.mybatis.Mapper">
+    <select id="selectUsers" resultType="com.mybot.telegram.User">
+        SELECT name, "ChatID", "Date", password, "timestamp" FROM public.users
+    </select>
+    <select id="selectUserByID" resultType="com.mybot.telegram.User">
+        SELECT * FROM public.users WHERE "ChatID" = #{chatID}
+    </select>
+    <insert id="insertUser" parameterType="com.mybot.telegram.User">
+        INSERT INTO public.users (name, "ChatID", "Date", "password", "timestamp", "Authorized") VALUES
+        (#{name},#{chatID},#{date},#{password},#{timestamp},#{authorized} )
+    </insert>
+    <update id="updateUser" parameterType="com.mybot.telegram.User">
+        UPDATE public.users SET name = #{name}, "Date" = #{date}, "password" = #{password}, "timestamp" = #{timestamp},
+        "Authorized" = #{authorized} WHERE "ChatID" = #{chatID}
+    </update>
+</mapper>
