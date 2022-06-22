@@ -6,14 +6,26 @@ import java.io.IOException;
 
 
 public class User {
-    private final Long timestamp;
-    private final Long chatID;
+
+
     private String name;
+    private final Long chatID;
     private String date;
     private String password;
+    private final Long timestamp;
+
+    public User(String name, Long chatID, String date, String password, Long timestamp, boolean authorized) {
+        this.name = name;
+        this.chatID = chatID;
+        this.date = date;
+        this.password = password;
+        this.timestamp = timestamp;
+        this.authorized = authorized;
+    }
+
     private boolean authorized;
 
-    public User(String name, long chatID) throws IOException {
+    public User(String name, long chatID) {
         this.chatID = chatID;
         this.timestamp = UserService.getTimeInLong();
         this.name = name;
@@ -21,6 +33,15 @@ public class User {
         this.date = UserService.getCurrentLocalDateTimeStamp();
         this.authorized = false;
         //insertUserSql(this);
+
+    }
+    public User(org.telegram.telegrambots.meta.api.objects.User user) throws IOException {
+        this.chatID = user.getId();
+        this.timestamp = UserService.getTimeInLong();
+        this.name = user.getFirstName() + " " + user.getLastName() +". "+user.getUserName();
+        this.password = UserService.generateSimplePassword();
+        this.date = UserService.getCurrentLocalDateTimeStamp();
+        this.authorized = false;
 
     }
 
@@ -54,7 +75,7 @@ public class User {
         return date;
     }
 
-    public void setDate(String date) throws IOException {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -67,7 +88,7 @@ public class User {
 
     }
 
-    public void setPassword(String password) throws IOException {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -75,7 +96,7 @@ public class User {
         return name;
     }
 
-    public void setName(String name) throws IOException {
+    public void setName(String name) {
         this.name = name;
     }
 

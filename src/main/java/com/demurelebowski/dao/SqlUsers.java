@@ -20,7 +20,7 @@ public class SqlUsers {
         return new SqlSessionFactoryBuilder().build(inputStream);
     }
 
-    public static List<User> getAllUsers() throws IOException {
+    public static List<User> getAllUsers() {
 
         try (SqlSession session = session().openSession()) {
 
@@ -33,7 +33,7 @@ public class SqlUsers {
         return null;
     }
 
-    public static User getUserSQL(long chatID) throws IOException {
+    public static User getUserSQL(Long chatID) throws IOException {
 
         try (SqlSession session = session().openSession()) {
 
