@@ -21,51 +21,32 @@ public class MyAmazingBot extends TelegramLongPollingBot {
             String message_text = update.getMessage().getText();
             Long chat_id = update.getMessage().getChatId();
 
-            SendMessage message = new SendMessage() ;// Create a message object
-            message.setChatId(String.valueOf(chat_id));
-
-            SendPhoto messagePhoto = new SendPhoto();
-            messagePhoto.setCaption(message_text);
-            messagePhoto.setChatId(String.valueOf(chat_id));
-
-            InputFile fileP = new InputFile().setMedia(new File("E:\\тел.png"));
-            messagePhoto.setPhoto(fileP);
             try {
                 User currentUser = SqlUsers.getUserSQL(chat_id);
                 if (currentUser != null) {
                    if (currentUser.isAuthorized()){
-                    TelegramCommands.executeCommand(message_text,message);}
+                    executeCommand(chat_id,message_text);
+                   }
                    else{
                        if (message_text.equals(currentUser.getPassword())){
                            currentUser.setAuthorized(true);
                            SqlUsers.updateUserSql(currentUser);
-                           TelegramCommands.executeAuthorized(message_text,message);
+                           executeAuthorized(chat_id);
                        }
                        else{
-                           TelegramCommands.executeNotAuthorized(message_text,message);
+                           executeNotAuthorized(chat_id);
                        }
                    }
                 }
                 else{
                     SqlUsers.insertUserSql(new User(update.getMessage().getFrom()));
-                    TelegramCommands.executeNotAuthorized(message_text,message);
+                    executeNotAuthorized(chat_id);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
 
-            try {
-                execute(message); // Sending our message object to user
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                execute(messagePhoto); // Sending our message object to user
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -81,4 +62,50 @@ public class MyAmazingBot extends TelegramLongPollingBot {
         // Return bot token from BotFather
         return "840069339:AAEHayYtft9gzEUxZu27_pDz38ugAdQXd3c";
     }
+    public void executeCommand (Long chat_id, String text) {
+
+        SendTextMessage(chat_id, text);
+        if ("photo".equals(text)){
+            SendPhotoMessage(chat_id,text,"E:\\тел.png");
+        }
+
+    }
+    public void executeNotAuthorized (Long chat_id) {
+
+        SendTextMessage(chat_id,"Not authorized! Enter password.");
+
+    }
+    public void executeAuthorized (Long chat_id) {
+
+        SendTextMessage(chat_id,"You are authorized.");
+
+    }
+    public void SendTextMessage (Long chat_id, String text) {
+
+        SendMessage message = new SendMessage();
+        message.setChatId(String.valueOf(chat_id));
+        message.setText(text);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void SendPhotoMessage (Long chat_id, String text, String PathFile) {
+
+        SendPhoto messagePhoto = new SendPhoto();
+        messagePhoto.setCaption(text);
+        messagePhoto.setChatId(String.valueOf(chat_id));
+
+        InputFile fileP = new InputFile().setMedia(new File(PathFile));
+        messagePhoto.setPhoto(fileP);
+
+        try {
+            execute(messagePhoto); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
