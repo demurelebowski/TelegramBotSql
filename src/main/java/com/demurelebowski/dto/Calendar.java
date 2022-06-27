@@ -18,7 +18,7 @@ public class Calendar {
     public static final String IGNORE = "ignore!@#$%^&";
     public static final String[] WD = {"M", "T", "W", "T", "F", "S", "S"};
 
-    public static InlineKeyboardMarkup inKeysPeriod(LocalDate date) {
+    public static InlineKeyboardMarkup inKeysPeriod(LocalDate date, String command) {
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
@@ -26,6 +26,8 @@ public class Calendar {
         if (date == null) {
             date = LocalDate.now();
         }
+
+
         Locale locale = Locale.forLanguageTag("en-EN");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("LLLL yyyy").withLocale(locale);
@@ -40,25 +42,28 @@ public class Calendar {
         rowsInline.add(daysOfWeekRow);
 
         LocalDate firstDay = date.withDayOfMonth(1);
+        //LocalDate firstDay = date.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate prM = firstDay.minusDays(1);
 
         int shift = firstDay.getDayOfWeek().getValue() - 1;
         int daysInMonth = YearMonth.of(firstDay.getYear(), firstDay.getMonth()).lengthOfMonth();
         int rows = ((daysInMonth + shift) % 7 > 0 ? 1 : 0) + (daysInMonth + shift) / 7;
         for (int i = 0; i < rows; i++) {
-            rowsInline.add(buildRow(firstDay, shift));
+            rowsInline.add(buildRow(firstDay, shift, command));
             firstDay = firstDay.plusDays(7 - shift);
             shift = 0;
         }
 
         List<InlineKeyboardButton> controlsRow = new ArrayList<>();
-        controlsRow.add(inButton("<", "<"));
-        controlsRow.add(inButton(">", ">"));
+        controlsRow.add(inButton("<", "cal_date_" + prM));
+
+        controlsRow.add(inButton(">", "cal_date_" + firstDay));
         rowsInline.add(controlsRow);
 
         return InlineKeyboard(rowsInline);
     }
 
-    private static List<InlineKeyboardButton> buildRow(LocalDate date, int shift) {
+    private static List<InlineKeyboardButton> buildRow(LocalDate date, int shift, String command) {
         List<InlineKeyboardButton> row = new ArrayList<>();
         int day = date.getDayOfMonth();
         LocalDate callbackDate = date;
@@ -67,7 +72,7 @@ public class Calendar {
         }
         for (int j = shift; j < 7; j++) {
             if (day <= (YearMonth.of(date.getYear(), date.getMonth()).lengthOfMonth())) {
-                row.add(inButton(Integer.toString(day++), "cal_date_" + callbackDate));
+                row.add(inButton(Integer.toString(day++), command + callbackDate));
                 callbackDate = callbackDate.plusDays(1);
             } else {
                 row.add(inButton(" ", IGNORE));
