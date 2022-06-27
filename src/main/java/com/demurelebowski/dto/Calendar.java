@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.demurelebowski.service.Keyboards.InlineKeyboard;
+import static com.demurelebowski.service.Keyboards.inlineKeyboard;
 import static com.demurelebowski.service.Keyboards.inButton;
 
 public class Calendar {
@@ -60,7 +60,7 @@ public class Calendar {
         controlsRow.add(inButton(">", "cal_date_" + firstDay));
         rowsInline.add(controlsRow);
 
-        return InlineKeyboard(rowsInline);
+        return inlineKeyboard(rowsInline);
     }
 
     private static List<InlineKeyboardButton> buildRow(LocalDate date, int shift, String command) {

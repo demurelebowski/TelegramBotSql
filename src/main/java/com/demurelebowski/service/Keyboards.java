@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Keyboards {
 
-    public static InlineKeyboardMarkup InlineKeyboard(List<List<InlineKeyboardButton>> rowsInline) {
+    public static InlineKeyboardMarkup inlineKeyboard(List<List<InlineKeyboardButton>> rowsInline) {
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         markupInline.setKeyboard(rowsInline);
